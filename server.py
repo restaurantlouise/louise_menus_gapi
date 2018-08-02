@@ -1,3 +1,5 @@
+import hug
+from falcon import HTTP_404
 from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file as oauth_file, client, tools
@@ -47,6 +49,16 @@ def run():
     if not sheets_data:
         return 'KO'
     return format_sheet_datas(sheets_data)
+
+
+@hug.get('/menus')
+def get_menus():
+    """ http verb to get menus """
+    data_to_send = run()
+    if data_to_send == 'KO':
+        response.status = HTTP_404
+        return "No menus found"
+    return data_to_send
 
 
 if __name__ == '__main__':
